@@ -8,8 +8,8 @@ frontend r_frontend
     default_backend r_backend
 backend r_backend
     balance roundrobin
-    server 56644-web-01 52.204.64.21 check port 80
-    server 56644-web-02 54.145.156.40 check port 80
+    server 56644-web-01 54.87.171.241 check port 80
+    server 56644-web-02 100.26.235.124 check port 80
 "
 sudo chown -R "$USER":"$USER" /etc/haproxy/
 echo "$configuration" >> /etc/haproxy/haproxy.cfg
