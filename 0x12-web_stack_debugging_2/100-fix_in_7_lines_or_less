@@ -1,1 +1,8 @@
 #!/usr/bin/env bash
+# make your fix short and sweet
+#   Bash script that configures nginx to run as user nginx
+pkill -9 -f apache2
+sed -i "s/80/8080/" /etc/nginx/sites-available/default
+chown nginx:nginx /etc/nginx/nginx.conf
+chmod u+wr,go+r /etc/nginx/nginx.conf
+sudo -u nginx service nginx start
