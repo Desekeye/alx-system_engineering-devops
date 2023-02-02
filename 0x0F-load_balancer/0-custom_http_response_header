@@ -1,13 +1,23 @@
 #!/usr/bin/env bash
-
 # configures a brand new Ubuntu machine to the requirements
+FILE="/etc/nginx/sites-available/default"
+ERRORFILE="/usr/share/nginx/html/404error.html"
 
-sudo apt update
-sudo apt install nginx -y
-sudo ufw allow 'Nginx HTTP'
-sudo service nginx start
-sudo chown -R "$USER":"$USER" /var/www
-echo "Hello World!" | sudo tee /var/www/html/index.html
-sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/
-sudo sed -i "/server_name _;/c\ \tserver_name _;\n\tadd_header X-Served-By \$hostname;\n" /etc/nginx/sites-available/default
-sudo service nginx restart
+REDIRECT="\n\tlocation /redirect_me {\n\t\treturn 301 https://youtu.be/dQw4w9WgXcQ;\n\t}\n"
+ERRORREDIRECT="\n\terror_page 404 /404error.html;\n\tlocation = /404error.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
+CUSTOMHEADER='\n\tadd_header X-Served-By $hostname;\n'
+
+STRING="Hello World!"
+FOUR="Ceci n'est pas une page"
+
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "$STRING" > /var/www/html/index.nginx-debian.html
+sed -i "37i\ $REDIRECT" "$FILE"
+
+echo "$FOUR" > "$ERRORFILE"
+sed -i "37i\ $ERRORREDIRECT" "$FILE"
+
+sed -i "37i\ $CUSTOMHEADER" "$FILE"
+service nginx restart
